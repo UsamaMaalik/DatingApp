@@ -30,6 +30,7 @@ namespace API
             services.AddDbContext<DataContext>( options => options.UseSqlServer(_config.GetConnectionString("DefaultConnections")));
             services.AddControllers();
             services.AddScoped<API.IService.IAppUser,API.Mvvm.AppUser>();
+            services.AddScoped<API.IService.IAccounts,API.Mvvm.Accounts>();
             services.AddCors();
             services.AddSwaggerGen(c =>
             {

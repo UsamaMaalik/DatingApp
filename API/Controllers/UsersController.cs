@@ -11,10 +11,11 @@ namespace API.Controllers
    
     public class UsersController : BaseApiController
     {
-        public UsersController(IAppUser iAppUser) : base(iAppUser)
+        private readonly IAppUser _iAppUser;
+        public UsersController(IAppUser iAppUser)
         {
+            _iAppUser = iAppUser;
         }
-
         [HttpGet]
         public async Task<IEnumerable<API.Entities.AppUser>> GetAppUsers()
         {

@@ -13,12 +13,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class BaseApiController : ControllerBase
     {
-        protected readonly IAppUser _iAppUser;
-        public BaseApiController(IAppUser iAppUser)
-        {
-            _iAppUser = iAppUser;
-        }
- 
+
         
     }
 }
