@@ -441,3 +441,5 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 appsettings.json
+API/Data/Migrations/20211212170515_UserPasswordAdded.cs
+API/Data/Migrations/20211212170515_UserPasswordAdded.Designer.cs
