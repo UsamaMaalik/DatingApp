@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-   [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+   
+    public class UsersController : BaseApiController
     {
-        private readonly IAppUser _iAppUser;
-        public UsersController(IAppUser iAppUser)
+        public UsersController(IAppUser iAppUser) : base(iAppUser)
         {
-            _iAppUser = iAppUser;
         }
+
         [HttpGet]
         public async Task<IEnumerable<API.Entities.AppUser>> GetAppUsers()
         {
