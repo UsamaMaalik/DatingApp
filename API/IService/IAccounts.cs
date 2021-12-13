@@ -9,5 +9,6 @@ namespace API.IService
     public interface IAccounts
     {
         Task<Common.Result> Register(string userName, string password);
+        Task<Common.Result> UsernameAlreadyExist(string userName);
     }
 }

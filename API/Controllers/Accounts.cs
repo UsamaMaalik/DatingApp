@@ -18,11 +18,11 @@ namespace API.Controllers
             this.iAccounts = iAccounts;
         }
         [HttpPost("register")]
-        public async Task<Common.Result> Register(string userName, string password)
+        public async Task<ActionResult<Common.Result>> Register(API.Mvvm.Accounts.RegisterDTO dTO)
         {
-            var result = await iAccounts.Register(userName, password);
-            return result;
-        }
+            var result = await iAccounts.Register(dTO.UserName, dTO.Password);
 
+            return result.Status ? result : BadRequest(result.Message);
+        }
     }
 }
