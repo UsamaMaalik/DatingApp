@@ -8,8 +8,8 @@ namespace API.IService
 {
     public interface IAccounts
     {
-        Task<Common.Result> Register(string userName, string password);
-        Task<Common.Result> Login (API.Mvvm.Accounts.RegisterDTO dTO);
+        Task<API.DTOs.LoginRegisterDTO> Register(string userName, string password);
+        Task<API.DTOs.LoginRegisterDTO> Login (API.Mvvm.Accounts.RegisterDTO dTO);
         Task<Common.Result> UsernameAlreadyExist(string userName);
     }
 }
