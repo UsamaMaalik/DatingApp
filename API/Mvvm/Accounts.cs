@@ -33,21 +33,21 @@ namespace API.Mvvm
             {
                 result = await UsernameAlreadyExist(userName);
 
-                if(result.Status)
+                if (result.Status)
                 {
-                     using (var hmac = new HMACSHA512())
-                {
-                    var user = new Entities.AppUser()
+                    using (var hmac = new HMACSHA512())
                     {
-                        UserName = userName,
-                        PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
-                        PasswordSalt = hmac.Key
-                    };
-                    _context.AppUsers.Add(user);
-                    await _context.SaveChangesAsync();
-                    result.Status = true;
-                    result.Message = $"{userName} Added Successfully";
-                }
+                        var user = new Entities.AppUser()
+                        {
+                            UserName = userName,
+                            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
+                            PasswordSalt = hmac.Key
+                        };
+                        _context.AppUsers.Add(user);
+                        await _context.SaveChangesAsync();
+                        result.Status = true;
+                        result.Message = $"{userName} Added Successfully";
+                    }
                 }
             }
             catch (System.Exception e)
@@ -64,8 +64,8 @@ namespace API.Mvvm
 
             try
             {
-                result.Status = await _context.AppUsers.AnyAsync( x => x.UserName.ToLower() == userName.ToLower() );
-                result.Message = result.Status ? "Already Exist": "Not Exists";
+                result.Status = await _context.AppUsers.AnyAsync(x => x.UserName.ToLower() == userName.ToLower());
+                result.Message = result.Status ? "Already Exist" : "Not Exists";
                 result.Status = !result.Status;
             }
             catch (System.Exception e)
@@ -74,6 +74,73 @@ namespace API.Mvvm
                 result.Message = e.Message;
             }
             return result;
+        }
+
+        public async Task<Common.Result> Login(RegisterDTO dTO)
+        {
+            var result = new Common.Result();
+            try
+            {
+                var data = await _context.AppUsers.SingleOrDefaultAsync(x => x.UserName.ToLower() == dTO.UserName.ToLower());
+                if(data == null)
+                {
+                    result.Status = false;
+                    result.Message = "Invalid Username";
+                    return result;
+                }
+                result = HashVerification(dTO.Password,data.PasswordSalt,data.PasswordHash);
+            }
+            catch (System.Exception e)
+            {
+                result.Status = false;
+                result.Message = e.Message;
+            }
+            return result;
+        }
+
+        public Common.Result HashVerification(string Password, byte[] passwordSalt, byte[] passwordHash)
+        {
+            var result = new Common.Result();
+            bool IsValidPassword = true;
+            try
+            {
+                using (var hmac = new HMACSHA512(passwordSalt))
+                {
+                    var hash =  hmac.ComputeHash(Encoding.UTF8.GetBytes(Password));
+                    if (hash.Length == passwordHash.Length && hash.Length > 0)
+                    {
+                        for (int i = 0; i < hash.Length; i++)
+                        {
+                            if (hash[i] != passwordHash[i])
+                            {
+                                IsValidPassword = false;
+                                break;
+                            }
+                        }
+                        if (IsValidPassword)
+                        {
+                            result.Status = true;
+                            result.Message = "Authorized";
+                        }
+                        else
+                        {
+                            result.Status = false;
+                            result.Message = "Invalid password";
+                        }
+                    }
+                    else
+                    {
+                        result.Status = false;
+                        result.Message = "Invalid password";
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                result.Status = false;
+                result.Message = e.Message;
+            }
+            return  result;
         }
     }
 }

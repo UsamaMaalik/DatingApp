@@ -24,6 +24,12 @@ namespace API.Controllers
 
             return result.Status ? result : BadRequest(result.Message);
         }
+        [HttpPost("login")]
+        public async Task<ActionResult<Common.Result>> Login(API.Mvvm.Accounts.RegisterDTO dTO)
+        {
+            var result = await iAccounts.Login(dTO);
+            return result.Status ? result : Unauthorized(result.Message);
+        }
 
         [HttpPost("testing")]
         public ActionResult<Common.Result> Testing(API.Mvvm.Accounts.RegisterDTO dTO)
