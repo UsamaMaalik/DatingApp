@@ -24,5 +24,14 @@ namespace API.Controllers
 
             return result.Status ? result : BadRequest(result.Message);
         }
+
+        [HttpPost("testing")]
+        public ActionResult<Common.Result> Testing(API.Mvvm.Accounts.RegisterDTO dTO)
+        {
+            var result = new Common.Result(){Message = dTO.UserName, Status = true};
+
+            return result.Status ? result : BadRequest(result.Message);
+
+        }
     }
 }

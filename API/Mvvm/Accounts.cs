@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -20,7 +21,9 @@ namespace API.Mvvm
         }
         public class RegisterDTO
         {
+            [Required]
             public string UserName { get; set; }
+            [Required]
             public string Password { get; set; }
         }
         public async Task<Common.Result> Register(string userName, string password)
